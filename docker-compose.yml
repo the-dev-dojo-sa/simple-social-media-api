@@ -1,0 +1,42 @@
+x-logging:
+  &default-logging
+  driver: "json-file"
+  options:
+    max-size: "1m"
+    max-file: "1"
+    tag: "{{.Name}}"
+
+services:
+  simple-social-media-api:
+    image: ghcr.io/the-dev-dojo-sa/simple-social-media-api
+    volumes:
+      - database:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uvicorn app.main:app --proxy-headers --host 0.0.0.0 --port 3000
+    expose:
+      - 3000
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.http.routers.simple-social-media-api.entrypoints=websecure
+      - traefik.http.routers.simple-social-media-api.rule=Host(`simple-social-media-api.nachert.art`)
+      - logging=promtail
+      - logging_jobname=containerlogs
+    networks:
+      - proxy
+      - monitoring
+    env_file:
+      - stack.env
+    logging: *default-logging
+
+networks:
+  proxy:
+    external: true
+  monitoring:
+    external: true
+
+volumes:
+  database:
+    driver: local
