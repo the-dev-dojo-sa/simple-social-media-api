@@ -13,13 +13,12 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Настройка CORS для разрешения запросов с любого адреса
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Разрешаем все источники
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Разрешаем все HTTP методы
-    allow_headers=["*"],  # Разрешаем все заголовки
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Dependency
