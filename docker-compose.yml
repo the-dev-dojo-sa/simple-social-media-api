@@ -8,7 +8,7 @@ x-logging:
 
 services:
   simple-social-media-api:
-    image: ghcr.io/the-dev-dojo-sa/simple-social-media-api
+    image: ghcr.io/the-dev-dojo-sa/simple-social-media-api:main
     volumes:
       - database:/app
     environment:
