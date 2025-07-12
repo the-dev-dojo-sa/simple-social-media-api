@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from . import models
-from .database import SessionLocal
+from .database import get_db
 
 # Configuration
 SECRET_KEY = "your-secret-key-here-change-in-production"
@@ -46,13 +46,6 @@ def verify_token(token: str) -> Optional[str]:
         return username
     except JWTError:
         return None
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
